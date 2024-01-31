@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ang13-app",
+            "outputPath": "dist/ang13-app/browser",
             "index": "projects/ang13-app/src/index.html",
             "main": "projects/ang13-app/src/main.ts",
             "polyfills": "projects/ang13-app/src/polyfills.ts",
@@ -103,6 +103,65 @@
             ],
             "scripts": []
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/ang13-app/server",
+            "main": "projects/ang13-app/server.ts",
+            "tsConfig": "projects/ang13-app/tsconfig.server.json",
+            "inlineStyleLanguage": "scss"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "projects/ang13-app/src/environments/environment.ts",
+                  "with": "projects/ang13-app/src/environments/environment.prod.ts"
+                }
+              ]
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "ang13-app:build:development",
+              "serverTarget": "ang13-app:server:development"
+            },
+            "production": {
+              "browserTarget": "ang13-app:build:production",
+              "serverTarget": "ang13-app:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "ang13-app:build:production",
+              "serverTarget": "ang13-app:server:production"
+            },
+            "development": {
+              "browserTarget": "ang13-app:build:development",
+              "serverTarget": "ang13-app:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     },
